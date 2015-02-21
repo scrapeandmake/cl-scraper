@@ -4,7 +4,7 @@ from flask.ext.login import login_required, current_user
 
 from .app import app, db
 from .forms import LoginForm, RegistrationForm
-from .models import Item, Image
+from .models import Item, Image, User
 from sqlalchemy import desc
 import random
 
@@ -19,7 +19,7 @@ def flash_errors(form, category="warning"):
 
 @app.route("/")
 def index():
-    top_bookmarks = BookmarkUser.query.order_by(desc(BookmarkUser.clicks)).all()
+    top_bookmarks = ['list', 'of', 'cool','things']
     return render_template("index.html", bookmarks=top_bookmarks[:10])
 
 @app.route("/dashboard", methods=['GET', 'POST'])
@@ -74,51 +74,3 @@ def register():
         flash_errors(form)
 
     return render_template("register.html", form=form)
-
-@app.route('/dashboard/add_bookmark', methods=['POST'])
-def add_bookmark():
-    form = AddBookmark()
-    if form.validate_on_submit():
-        url = Bookmark.query.filter_by(url=form.url.data).first()
-        if url:
-            flash("You've already shortened that URL!")
-        else:
-            shortened_url = shorten_url(url)
-            bookmark = Bookmark(title=form.title.data,
-                                url=form.url.data,
-                                short_url=shortened_url,
-                                description=form.description.data)
-            db.session.add(bookmark)
-            db.session.commit()
-            bookmark_id = Bookmark.query.filter_by(short_url=shortened_url).first()
-            user_bookmark = BookmarkUser(user_id=current_user.id,
-                                          item_id=bookmark_id.id)
-            db.session.add(user_bookmark)
-            db.session.commit()
-            flash("You successfully added a link")
-            return redirect(url_for('dashboard'))
-    else:
-        flash_errors(form)
-
-    return redirect(url_for('dashboard'))
-
-@app.route('/b/<short_url>')
-def url_redirect(short_url):
-    print(short_url)
-    correct_url = Bookmark.query.filter_by(short_url=short_url).first()
-    if correct_url:
-        bookmark_user = BookmarkUser.query.filter_by(item_id=correct_url.id).first()
-        bookmark_user.clicks = bookmark_user.clicks + 1
-        db.session.commit()
-        return redirect(correct_url.url)
-    else:
-        return redirect(url_for('/'))
-
-def shorten_url(a_url):
-    alphabet = list('abcdefghijklmnopqrstuvwxyz1234567890')
-    shortened_url = ''.join(random.sample(alphabet, 5))
-    existing_url = Bookmark.query.filter_by(short_url=shortened_url).first()
-    if shortened_url == existing_url:
-        return shorten_url(a_url)
-    else:
-        return shortened_url
