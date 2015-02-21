@@ -38,20 +38,45 @@ def image_lookup(bsoup_item):
     except:
         return 'no image'
 
+def lat_long_lookup(bsoup_item):
+
+    location = bsoup_item.find('div', attrs={'class' : 'viewposting'})
+    if location:
+        item_lat = location["data-latitude"].split("data-latitude=")[-1]
+        item_long = location["data-longitude"].split("data-longitude=")[-1]
+        return item_lat, item_long
+    else:
+        return (None, None)
+
+def description_lookup(bsoup_item):
+    desc = bsoup_item.find('section', attrs={'id' : 'postingbody'})
+    desc = desc.getText().strip()
+    if desc:
+        return desc
+    else:
+        return None
+
+def name_lookup(bsoup_item):
+    item = bsoup_item.find('h2', attrs={'class' :'postingtitle'}).text.strip()
+    if item:
+        return item
+    else:
+        return None
 
 def item_lookup(bsoup_item):
-
 
     ind_page = url_request(bsoup_item)
     souped_item = BeautifulSoup(ind_page)
 
-    item_name = souped_item.find('h2', attrs={'class' :
-                                              'postingtitle'}).text.strip()
+    item_name = name_lookup(souped_item)
     item_url = 'http://raleigh.craigslist.com{}'.format(bsoup_item)
     item_dates = date_lookup(souped_item)
     item_images = image_lookup(souped_item)
+    item_lat, item_long = lat_long_lookup(souped_item)
+    item_description = description_lookup(souped_item)
 
-    return (item_name, item_url, item_dates, item_images)
+    return (item_name, item_url, item_dates, item_images,
+            item_lat, item_long, item_description)
 
 def run_full_lookup():
 
@@ -60,4 +85,4 @@ def run_full_lookup():
 
     return [item_lookup(item) for item in live_item_list]
 
-print(run_full_lookup())
+run_full_lookup()
