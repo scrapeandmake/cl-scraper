@@ -1,0 +1,17 @@
+
+.nav a {
+  color: #5a5a5a;
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 15px 10px;
+}
+
+.nav li {
+  display: inline;
+}
+
+.mainscreen {
+  background-image: url('http://www.leayouthservices.org/wp-content/uploads/2015/01/woodworking-tools.jpg');
+  height: 1000px;
+}
