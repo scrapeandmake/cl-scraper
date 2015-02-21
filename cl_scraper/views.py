@@ -3,8 +3,8 @@ from flask.ext.login import login_user, logout_user
 from flask.ext.login import login_required, current_user
 
 from .app import app, db
-from .forms import LoginForm, RegistrationForm, AddBookmark
-from .models import Bookmark, User, BookmarkUser
+from .forms import LoginForm, RegistrationForm
+from .models import Item, Image
 from sqlalchemy import desc
 import random
 

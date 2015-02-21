@@ -3,9 +3,9 @@ from .extensions import bcrypt, login_manager
 from flask.ext.login import UserMixin
 
 
-@login_manager.user_loader
-def load_user(id):
-    return User.query.get(id)
+# @login_manager.user_loader
+# def load_user(id):
+#     return User.query.get(id)
 
 
 class Item(db.Model):
@@ -18,7 +18,7 @@ class Item(db.Model):
     updated = db.Column(db.String(255), nullable=True)
     description = db.Column(db.String(255), nullable=True)
 
-    images = db.Column(db.foreign)
+    #images = db.Column(db.foreign)
 
     def __init__(self, name, url, created):
         self.name = name
@@ -32,4 +32,4 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image = db.Column(db.String(255), nullable=False)
 
-import views
+import cl_scraper.views
