@@ -18,8 +18,3 @@ class RegistrationForm(Form):
                     EqualTo('password_verification',
                             message="Passwords must match")])
     password_verification = PasswordField('Repeat password')
-
-class AddBookmark(Form):
-    title = StringField('Title', validators=[DataRequired()])
-    url = StringField('URL', validators=[DataRequired(), URL()])
-    description = StringField('Description - optional')
