@@ -83,6 +83,6 @@ def run_full_lookup():
     souped_page = BeautifulSoup(url_request())
     live_item_list = [item.find('a')['href'] for item in souped_page.find_all('p')]
 
-    return [item_lookup(item) for item in live_item_list]
+    return [item_lookup(item) for item in live_item_list[:4]]
 
-run_full_lookup()
+print(run_full_lookup())

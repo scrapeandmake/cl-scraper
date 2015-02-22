@@ -30,31 +30,30 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return "<User {}>".format(self.email)
 
+
 class Item(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, db.ForeignKey('image.item_id'),
+                   primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     url = db.Column(db.String(255), nullable=False)
     created = db.Column(db.String(255), nullable=False)
-    latitude = db.Column(db.String(255), nullable=True)
-    longitude = db.Column(db.String(255), nullable=True)
+    latitude = db.Column(db.Float(Precision=64), nullable=True)
+    longitude = db.Column(db.Float(Precision=64), nullable=True)
     updated = db.Column(db.String(255), nullable=True)
     description = db.Column(db.String(255), nullable=True)
 
-    def __init__(self, name, url, created):
-        self.name = name
-        self.url = url
-        self.created = created
+    images = db.relationship('Image', backref=db.backref('Item',
+                             lazy='dynamic'))
 
     def __repr__(self):
         return "{}".format(self.name)
 
+
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
+    item_id = db.Column(db.Integer)
     image = db.Column(db.String(255), nullable=False)
 
-    images = db.relationship('Item', backref=db.backref('Image',
-                             lazy='dynamic'))
     def __repr__(self):
         return "{}".format(self.image)
 
