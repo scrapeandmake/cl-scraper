@@ -5,7 +5,6 @@ from flask.ext.login import login_required, current_user
 from .app import app, db
 from .forms import LoginForm, RegistrationForm
 from .models import Item, Image, User
-from sqlalchemy import desc
 import random
 
 
@@ -19,19 +18,13 @@ def flash_errors(form, category="warning"):
 
 @app.route("/")
 def index():
-    top_bookmarks = ['list', 'of', 'cool','things']
-    return render_template("index.html", bookmarks=top_bookmarks[:10])
+    return render_template("index.html")
 
 @app.route("/dashboard", methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    form = AddBookmark()
     user = current_user.name.capitalize()
-    bookmarks = BookmarkUser.query.filter_by(user_id=current_user.id).all()
-    return render_template("dashboard.html",
-                           bookmarks=bookmarks,
-                           form=form,
-                           user=user)
+    return render_template("dashboard.html", user=user)
 
 
 @app.route("/login", methods=["GET", "POST"])
