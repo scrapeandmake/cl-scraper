@@ -20,7 +20,7 @@ SECRET_KEY = 'development-key'
 DEBUG_TB_INTERCEPT_REDIRECTS = False
 
 def create_app():
-    app = Flask('cl_scraper')
+    app = Flask(__name__)
     app.config.from_object(__name__)
     app.register_blueprint(users)
     # app.register_blueprint(api, url_prefix="/api/v1")

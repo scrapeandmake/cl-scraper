@@ -27,13 +27,5 @@ def make_shell_context():
     return dict(app=app, db=db)
 
 
-@manager.command
-def test():
-    """Run the tests."""
-    import pytest
-    exit_code = pytest.main([TEST_PATH, '--verbose'])
-    return exit_code
-
-
 if __name__ == '__main__':
     manager.run()
