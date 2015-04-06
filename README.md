@@ -2,9 +2,4 @@
 
 ## Description
 
-Seb fill out
-
-
-### How to setup environment  
-
-Zack fill out
+Simple application to scrape the cragislist website's free section and display specific results in a dashboard
